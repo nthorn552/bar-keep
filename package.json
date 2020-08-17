@@ -1,0 +1,26 @@
+{
+  "name": "bar-keep",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nthorn552/bar-keep.git"
+  },
+  "author": "nthorn552",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nthorn552/bar-keep/issues"
+  },
+  "homepage": "https://github.com/nthorn552/bar-keep#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.7",
+    "typescript": "^3.9.7"
+  }
+}

@@ -17,7 +17,7 @@ class DrinkQueryBuilder extends React.Component<{}, DrinkQueryBuilderState> {
     constructor(props: {}) {
         super(props);
         this.state = {
-            queryItems: [{ id: 1, priority: "REQUIRED", type: "LIQUOR", name: "" }]
+            queryItems: [{ id: 0, priority: "REQUIRED", type: "LIQUOR", name: "" }]
         };
     }
 

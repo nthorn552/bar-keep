@@ -3,7 +3,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import './App.css'
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
-import DrinkQueryBuilder from './DrinkQueryBuilder';
+import DrinkQueryBuilder from './components/DrinkQueryBuilder';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

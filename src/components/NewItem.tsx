@@ -3,7 +3,8 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { DrinkQueryItem, Ingredient } from './DrinkQueryBuilder';
+import { DrinkQueryItem } from './DrinkQueryBuilder';
+import Product from '../types/Product';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -26,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type NewItemProps = {
     addItem: (item: DrinkQueryItem) => void,
-    options: Ingredient[]
+    options: Product[]
 }
 
 
@@ -47,29 +48,16 @@ export default (props: NewItemProps) => {
                     Can have
                             </MenuItem>
             </TextField>
-            {/* <TextField select className={classes.context} variant="standard" value={props.queryItem.type} onChange={(event) => {
-                props.updateItem({ ...props.queryItem, type: event.target.value })
-            }}>
-                <MenuItem value="LIQUOR">
-                    liquor
-                            </MenuItem>
-                <MenuItem value="MIXER">
-                    mixer
-                            </MenuItem>
-                <MenuItem value="OTHER">
-                    other
-                            </MenuItem>
-            </TextField> */}
             <Autocomplete
                 id="combo-box-demo"
-                options={[{ id: 123, name: "test" }]}
-                getOptionLabel={(option: Ingredient) => option.name}
+                options={props.options}
+                getOptionLabel={(option: Product) => option.name}
                 openOnFocus={false}
                 inputValue={value}
                 style={{ width: 300 }}
                 renderInput={(params: any) => <TextField {...params} label="Combo box" variant="outlined" />}
                 onInputChange={(_event, value, reason) => reason == "reset" ? setValue("") : setValue(value)}
-                onChange={(_event, item: Ingredient) => {
+                onChange={(_event, item: Product) => {
                     if (item) {
                         props.addItem({ priority, item });
                         setValue("");

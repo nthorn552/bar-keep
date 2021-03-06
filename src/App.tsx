@@ -2,8 +2,7 @@ import React from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import './App.css'
 import Container from '@material-ui/core/Container';
-import Box from '@material-ui/core/Box';
-import DrinkQueryBuilder from './components/DrinkQueryBuilder';
+import BarKeep from './BarKeep'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -28,9 +27,7 @@ const App: React.StatelessComponent<{}> = () => {
     return (
         <Container>
             <h1>Welcome to Bar Keep</h1>
-            <Box>
-                <DrinkQueryBuilder />
-            </Box>
+            <BarKeep />
         </Container>
     )
 };

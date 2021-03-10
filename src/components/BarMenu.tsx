@@ -1,13 +1,11 @@
 import React from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Box from '@material-ui/core/Box';
-import backBackApi from '../services/barBackApi';
-import InventoryDisplay from './InventoryDisplay';
-import Product from '../types/Product';
+import barBackApi from '../services/barBackApi';
 import Inventory, { InventoryPriority } from '../types/Inventory';
-import AddNewInventory from './AddNewInventory';
 import Recipe from '../types/Recipe';
+import RecipeDisplay from './MenuDisplayItem';
+import MenuDisplay from './MenuDisplay';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -63,9 +61,9 @@ class BarKeep extends React.Component<BarMenuProps, BarMenuState> {
   }
 
   componentDidUpdate() {
-    if (this.props.inventory.length !== this.state.availableInventory.length) { //TODO: will need to actually compare items in inventory
+    if (this.props.inventory.length !== this.state.availableInventory.length || !this.props.inventory.every((val, index) => this.state.availableInventory[index] && val === this.state.availableInventory[index])) {
       this.setState({ ...this.state, availableInventory: this.props.inventory, menuState: MenuState.LOADING }, () => {
-        backBackApi.get(`/recipes`, {
+        barBackApi.get(`/recipes`, {
           params: {
             requiredProducts: this.getProductIdListByInventoryPriority(InventoryPriority.REQUIRED),
             availableProducts: this.getProductIdListByInventoryPriority(InventoryPriority.AVAILABLE)
@@ -83,9 +81,7 @@ class BarKeep extends React.Component<BarMenuProps, BarMenuState> {
   render() {
     let menuDisplay;
     if (this.state.menuState == MenuState.READY) {
-      menuDisplay = this.state.availableMenu.map(menuRecipe => {
-        return <div key={menuRecipe.id}>{menuRecipe.name}</div>
-      })
+      menuDisplay = <MenuDisplay menu={this.state.availableMenu} />
     } else if (this.state.menuState === MenuState.LOADING) {
       menuDisplay = <div>Refreshing menu...</div>
     } else {

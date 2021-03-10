@@ -3,7 +3,6 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { DrinkQueryItem } from './DrinkQueryBuilder';
 import Product from '../types/Product';
 import Inventory, { InventoryPriority } from '../types/Inventory';
 
@@ -62,7 +61,7 @@ export default (props: NewItemProps) => {
         openOnFocus={false}
         inputValue={value}
         style={{ width: 300 }}
-        renderInput={(params: any) => <TextField {...params} label="Combo box" variant="outlined" />}
+        renderInput={(params: any) => <TextField {...params} label='Add product...' variant="outlined" />}
         onInputChange={(_event, value, reason) => reason == "reset" ? setValue("") : setValue(value)}
         onChange={(_event, item: Product) => {
           if (item) {

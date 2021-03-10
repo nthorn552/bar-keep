@@ -3,10 +3,11 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
 import backBackApi from './services/barBackApi';
+
+import Product from './types/Product';
+import Inventory, { InventoryPriority } from './types/Inventory';
 import InventoryDisplay from './components/InventoryDisplay';
 import BarMenu from './components/BarMenu';
-import Product from './types/Product';
-import Inventory from './types/Inventory';
 import AddNewInventory from './components/AddNewInventory';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -65,11 +66,20 @@ class BarKeep extends React.Component<{}, BarKeepState> {
     this.setState({ ...this.state, filteredProductList: newFilteredProductList })
   }
 
+  updateInventoryItem(targetProductId: string, newPriority: InventoryPriority) {
+    const inventoryItemIndex = this.state.inventoryList.findIndex(thisItem => thisItem.product.id === targetProductId);
+    if (~inventoryItemIndex) {
+      this.setState({
+        ...this.state, inventoryList: [...this.state.inventoryList.slice(0, inventoryItemIndex), { ...this.state.inventoryList[inventoryItemIndex], priority: newPriority }, ...this.state.inventoryList.slice(inventoryItemIndex + 1)]
+      });
+    }
+  }
+
   render() {
     return (
       <Container>
         <Box>
-          <InventoryDisplay inventoryList={this.state.inventoryList} />
+          <InventoryDisplay inventoryList={this.state.inventoryList} updateInventory={this.updateInventoryItem.bind(this)} />
         </Box>
         <Box>
           {this.state.productListReady &&

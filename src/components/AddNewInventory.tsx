@@ -5,6 +5,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import Product from '../types/Product';
 import Inventory, { InventoryPriority } from '../types/Inventory';
+import { Container } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -36,7 +37,7 @@ export default (props: NewItemProps) => {
   const [value, setValue] = useState("");
   const [priority, setPriority] = useState(InventoryPriority.AVAILABLE);
   return (
-    <div className={classes.root}>
+    <Container className={classes.root}>
       <TextField select className={classes.context} variant="standard" value={priority} onChange={(event) => {
         switch (event.target.value) {
           case InventoryPriority.REQUIRED:
@@ -71,6 +72,6 @@ export default (props: NewItemProps) => {
           }
         }}
       />
-    </div>
+    </Container>
   )
 }

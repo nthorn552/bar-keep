@@ -3,23 +3,49 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Recipe from '../types/Recipe';
 import MenuDisplayItem from './MenuDisplayItem';
 import barBackApi from '../services/barBackApi';
+import RecipeDisplay from './RecipeDisplay';
+import { CircularProgress } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            '& .MuiTextField-root': {
-                margin: theme.spacing(1),
-                verticalAlign: 'initial'
-            }
+            display: 'flex',
+            width: '100%',
+            minHeight: theme.spacing(10),
+            backgroundColor: 'moccasin'
         },
-        context: {
-            width: '14ch'
+        menuPage: {
+            display: 'inline-flex',
+            flexDirection: 'column',
+            width: '50%',
+            backgroundColor: '#ffffff55',
+            border: '1px solid #ffffff33',
+            borderRadius: theme.spacing(1),
+            margin: theme.spacing(1),
+            padding: theme.spacing(1)
+        },
+        pageMessageContainer: {
+            display: 'flex',
+            flexGrow: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        pageContainer: {
+            display: 'flex',
+            flexDirection: 'column'
         }
     }),
 );
 
+export enum MenuState {
+    LOADING = 'loading',
+    READY = 'ready',
+    ERROR = 'error'
+}
+
 type MenuDisplayProps = {
-    menu: Recipe[]
+    menu: Recipe[],
+    menuState: MenuState
 }
 
 export default (props: MenuDisplayProps) => {
@@ -46,26 +72,41 @@ export default (props: MenuDisplayProps) => {
             setFullRecipe(null);
         }
     });
-    let activeMenuItemDisplay = null;
-    if (fullRecipe) {
-        activeMenuItemDisplay = fullRecipe.ingredients.map(ingredient => {
-            return <div key={ingredient.id}>{ingredient.product.name} - {ingredient.quantityCount} {ingredient.quantityType.toLowerCase()}</div>
-        })
+
+    let menuDisplay = null, recipeDisplay = null;
+    switch (props.menuState) {
+        case MenuState.READY:
+            menuDisplay = props.menu.length ? props.menu.map(menuRecipe => {
+                return <MenuDisplayItem key={menuRecipe.id} recipe={menuRecipe} isActive={activeMenuRecipe && menuRecipe.id === activeMenuRecipe.id} clickHandler={(recipe: Recipe) => {
+                    setActiveMenuItem(activeMenuRecipe && recipe.id === activeMenuRecipe.id ? null : recipe);
+                }} />
+            }) :
+                <div className={classes.pageMessageContainer}>
+                    No menu available due to limited ingredients
+                </div>
+            if (fullRecipeLoading) {
+                recipeDisplay = <div className={classes.pageMessageContainer}><CircularProgress /></div>
+            } else if (fullRecipe && !props.menu.find(recipe => recipe.id === fullRecipe.id)) {
+                setFullRecipe(null);
+            } else if (fullRecipe) {
+                recipeDisplay = <RecipeDisplay recipe={fullRecipe} />;
+            }
+            break;
+        case MenuState.LOADING:
+            menuDisplay = <div className={classes.pageMessageContainer}><CircularProgress /></div>
+            break;
+        case MenuState.ERROR:
+            menuDisplay = <div className={classes.pageMessageContainer}>Uh oh, something went wrong and we couldn't create the menu...</div>
+            break;
     }
+
     return (
         <div className={classes.root}>
-            <div>
-                {
-                    props.menu.map(menuRecipe => {
-                        return <MenuDisplayItem key={menuRecipe.id} recipe={menuRecipe} isActive={activeMenuRecipe && menuRecipe.id === activeMenuRecipe.id} clickHandler={(recipe: Recipe) => {
-                            setActiveMenuItem(activeMenuRecipe && recipe.id === activeMenuRecipe.id ? null : recipe);
-                        }} />
-                    })
-                }
+            <div className={classes.menuPage}>
+                {menuDisplay}
             </div>
-            <div>
-                Active recipe:
-                {activeMenuItemDisplay}
+            <div className={classes.menuPage}>
+                {recipeDisplay}
             </div>
 
         </div>

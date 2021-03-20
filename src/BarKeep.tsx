@@ -1,5 +1,4 @@
 import React from 'react'
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
 import backBackApi from './services/barBackApi';
@@ -9,23 +8,6 @@ import Inventory, { InventoryPriority } from './types/Inventory';
 import InventoryDisplay from './components/InventoryDisplay';
 import BarMenu from './components/BarMenu';
 import AddNewInventory from './components/AddNewInventory';
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      '& .MuiTextField-root': {
-        margin: theme.spacing(1),
-        verticalAlign: 'initial'
-      }
-    },
-    context: {
-      width: '14ch'
-    },
-    input: {
-      minWidth: '25ch'
-    }
-  }),
-);
 
 type BarKeepState = {
   productList: Product[],
@@ -45,6 +27,7 @@ class BarKeep extends React.Component<{}, BarKeepState> {
       inventoryList: []
     };
   }
+
 
   componentDidMount() {
     backBackApi.get(`/products`)

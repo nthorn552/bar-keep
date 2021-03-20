@@ -4,8 +4,7 @@ import Container from '@material-ui/core/Container';
 import barBackApi from '../services/barBackApi';
 import Inventory, { InventoryPriority } from '../types/Inventory';
 import Recipe from '../types/Recipe';
-import RecipeDisplay from './MenuDisplayItem';
-import MenuDisplay from './MenuDisplay';
+import MenuDisplay, { MenuState } from './MenuDisplay';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -23,12 +22,6 @@ const useStyles = makeStyles((theme: Theme) =>
     }
   }),
 );
-
-enum MenuState {
-  LOADING = 'loading',
-  READY = 'ready',
-  ERROR = 'error'
-}
 
 type BarMenuProps = {
   inventory: Inventory[]
@@ -72,6 +65,7 @@ class BarKeep extends React.Component<BarMenuProps, BarMenuState> {
           .then(res => {
             this.setState({ ...this.state, availableMenu: res.data, menuState: MenuState.READY });
           }).catch(err => {
+            console.log("ERROR?", err);
             this.setState({ ...this.state, availableMenu: [], menuState: MenuState.ERROR });
           })
       });
@@ -79,18 +73,9 @@ class BarKeep extends React.Component<BarMenuProps, BarMenuState> {
   }
 
   render() {
-    let menuDisplay;
-    if (this.state.menuState == MenuState.READY) {
-      menuDisplay = <MenuDisplay menu={this.state.availableMenu} />
-    } else if (this.state.menuState === MenuState.LOADING) {
-      menuDisplay = <div>Refreshing menu...</div>
-    } else {
-      menuDisplay = <div>Uh oh, something went wrong!</div>
-    }
-
     return (
       <Container>
-        {menuDisplay}
+        <MenuDisplay menu={this.state.availableMenu} menuState={this.state.menuState} />
       </Container>
     )
   }

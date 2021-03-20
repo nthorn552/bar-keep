@@ -2,22 +2,22 @@ import React from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Inventory, { InventoryPriority } from '../types/Inventory';
-import { Box } from '@material-ui/core';
+import { Box, Container } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            '& .MuiTextField-root': {
-                margin: theme.spacing(1),
-                verticalAlign: 'initial'
-            }
+            margin: theme.spacing(1)
         },
-        context: {
-            width: '14ch'
+        inventoryItem: {
+            margin: theme.spacing(1)
         },
         inventoryZone: {
-            minHeight: '3em',
-            border: 'dashed 2px black'
+            minHeight: theme.spacing(10),
+            border: 'solid 1px mediumturquoise',
+            borderRadius: theme.spacing(1),
+            padding: theme.spacing(1),
+            background: 'mintcream'
         }
     }),
 );
@@ -34,19 +34,20 @@ function handleInventoryDragAndDrop(e: React.DragEvent<HTMLElement>, inventory: 
 export default (props: InventoryDisplayProps) => {
     const classes = useStyles();
     return (
-        <div className={classes.root}>
+        <Container>
             <Box className={classes.inventoryZone} onDragOver={event => event.preventDefault()} onDrop={event => handleInventoryDragAndDrop(event, props.inventoryList, InventoryPriority.AVAILABLE, props.updateInventory)} >
                 Available<br />
                 {props.inventoryList.filter(inventoryItem => inventoryItem.priority == InventoryPriority.AVAILABLE).map(inventoryItem => (
-                    <TextField key={inventoryItem.product.id} draggable onDragStart={event => event.dataTransfer.setData('text/plain', inventoryItem.product.id)} variant="outlined" value={inventoryItem.product.name} InputProps={{ readOnly: true }} />
+                    <TextField className={classes.inventoryItem} key={inventoryItem.product.id} draggable onDragStart={event => event.dataTransfer.setData('text/plain', inventoryItem.product.id)} variant="outlined" value={inventoryItem.product.name} InputProps={{ readOnly: true }} />
                 ))}
             </Box>
+            <br />
             <Box className={classes.inventoryZone} onDragOver={event => event.preventDefault()} onDrop={event => handleInventoryDragAndDrop(event, props.inventoryList, InventoryPriority.REQUIRED, props.updateInventory)} >
                 Required<br />
                 {props.inventoryList.filter(inventoryItem => inventoryItem.priority == InventoryPriority.REQUIRED).map(inventoryItem => (
-                    <TextField key={inventoryItem.product.id} draggable onDragStart={event => event.dataTransfer.setData('text/plain', inventoryItem.product.id)} variant="outlined" value={inventoryItem.product.name} InputProps={{ readOnly: true }} />
+                    <TextField className={classes.inventoryItem} key={inventoryItem.product.id} draggable onDragStart={event => event.dataTransfer.setData('text/plain', inventoryItem.product.id)} variant="outlined" value={inventoryItem.product.name} InputProps={{ readOnly: true }} />
                 ))}
             </Box>
-        </div>
+        </Container>
     )
 }

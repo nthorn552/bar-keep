@@ -12,13 +12,10 @@ const useStyles = makeStyles((theme: Theme) =>
                 verticalAlign: 'initial'
             }
         },
-        context: {
-            width: '14ch'
-        },
-        input: {
-            minWidth: '25ch'
+        header: {
+            textAlign: 'center'
         }
-    }),
+    })
 );
 
 const App: React.StatelessComponent<{}> = () => {
@@ -26,7 +23,7 @@ const App: React.StatelessComponent<{}> = () => {
     const classes = useStyles();
     return (
         <Container>
-            <h1>Welcome to Bar Keep</h1>
+            <h1 className={classes.header}>Welcome to Bar Keep</h1>
             <BarKeep />
         </Container>
     )

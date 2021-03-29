@@ -109,6 +109,6 @@ export default (props: MenuDisplayProps) => {
                 {recipeDisplay}
             </div>
 
-        </div>
+        </div >
     )
 }

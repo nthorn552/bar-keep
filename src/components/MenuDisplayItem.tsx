@@ -6,13 +6,13 @@ import Recipe from '../types/Recipe';
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            '& .MuiTextField-root': {
-                margin: theme.spacing(1),
-                verticalAlign: 'initial'
-            }
+            margin: theme.spacing(1),
+            // '& .MuiTextField-root': {
+            //     verticalAlign: 'initial'
+            // }
         },
         context: {
-            width: '14ch'
+            margin: theme.spacing(1),
         },
         active: {
             backgroundColor: 'lightblue'
@@ -29,8 +29,6 @@ type RecipeDisplayProps = {
 export default (props: RecipeDisplayProps) => {
     const classes = useStyles();
     return (
-        <div className={classes.root}>
-            <TextField className={props.isActive ? classes.active : null} onClick={() => props.clickHandler(props.recipe)} variant="outlined" value={props.recipe.name} InputProps={{ readOnly: true }} />
-        </div>
+        <TextField className={classes.context + " " + (props.isActive ? classes.active : null)} onClick={() => props.clickHandler(props.recipe)} variant="outlined" value={props.recipe.name} InputProps={{ readOnly: true }} />
     )
 }

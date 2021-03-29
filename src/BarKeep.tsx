@@ -62,13 +62,15 @@ class BarKeep extends React.Component<{}, BarKeepState> {
     return (
       <Container>
         <Box>
-          <InventoryDisplay inventoryList={this.state.inventoryList} updateInventory={this.updateInventoryItem.bind(this)} />
-        </Box>
-        <Box>
           {this.state.productListReady &&
             <AddNewInventory availableProducts={this.state.filteredProductList} addInventory={this.addNewInventory.bind(this)} />
           }
         </Box>
+        <hr />
+        <Box>
+          <InventoryDisplay inventoryList={this.state.inventoryList} updateInventory={this.updateInventoryItem.bind(this)} />
+        </Box>
+        <br />
         <Box>
           <BarMenu inventory={this.state.inventoryList} />
         </Box>

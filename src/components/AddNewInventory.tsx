@@ -12,6 +12,7 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       display: 'flex',
       alignItems: 'center',
+      justifyContent: 'center',
       '& .MuiTextField-root': {
         margin: theme.spacing(1),
         alignItems: 'initial'

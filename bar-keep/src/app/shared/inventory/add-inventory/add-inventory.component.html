@@ -1,1 +1,12 @@
-<p>add-inventory works!</p>
+<div>Add inventory here
+  <input type="text"
+       placeholder="Pick one"
+       aria-label="Number"
+       matInput
+       [matAutocomplete]="auto">
+  <mat-autocomplete #auto="matAutocomplete">
+    <mat-option *ngFor="let option of availableProducts" [value]="option">
+      {{option.name}}
+    </mat-option>
+  </mat-autocomplete>
+</div>

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { RecipeComponent } from './core/pages/recipe/recipe.component';
@@ -17,8 +18,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     BrowserModule,
     HomeModule,
     RouterModule.forRoot([
-      {path: '', component: HomeComponent},
-      {path: 'recipe', component: RecipeComponent}
+      { path: '', component: HomeComponent },
+      { path: 'recipe/:id', component: RecipeComponent }
     ]),
     BrowserAnimationsModule
   ],

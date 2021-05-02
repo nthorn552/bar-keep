@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import Product from 'src/app/core/models/Product';
 
 @Component({
   selector: 'add-inventory',
@@ -7,7 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AddInventoryComponent implements OnInit {
 
-  constructor() { }
+  @Input() availableProducts: Product[] = [{
+    id: 'test',
+    name: "test"
+  }];
+
+  constructor(
+  ) { }
 
   ngOnInit(): void {
   }

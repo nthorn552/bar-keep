@@ -8,6 +8,7 @@ import Inventory, { InventoryPriority } from './types/Inventory';
 import InventoryDisplay from './components/InventoryDisplay';
 import BarMenu from './components/BarMenu';
 import AddNewInventory from './components/AddNewInventory';
+import { AxiosResponse } from 'axios';
 
 type BarKeepState = {
   productList: Product[],
@@ -31,7 +32,7 @@ class BarKeep extends React.Component<{}, BarKeepState> {
 
   componentDidMount() {
     backBackApi.get(`/products`)
-      .then(res => {
+      .then((res: AxiosResponse<Product[]>) => {
         this.setState({ ...this.state, productListReady: true, productList: res.data });
         this.setFilteredProductList();
       })

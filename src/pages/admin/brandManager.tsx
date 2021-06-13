@@ -1,14 +1,15 @@
 import React from "react";
 import Container from "@material-ui/core/Container";
-import Box from "@material-ui/core/Box";
 import backBackApi from "../../services/barBackApi";
 import { AxiosResponse } from "axios";
 import Brand from "../../types/Brand";
-import BrandListItem from './brandListItem';
+import BrandList from "./brandList";
+import BrandEditor from "./BrandEditor";
 
 type BrandManagerState = {
   brandList: Brand[];
   brandListReady: boolean;
+  active?: Brand;
 };
 
 class BrandManager extends React.Component<{}, BrandManagerState> {
@@ -31,19 +32,22 @@ class BrandManager extends React.Component<{}, BrandManagerState> {
   }
 
   onClickBrand(brand: Brand) {
+    this.setState({ active: brand });
     console.log("brand selected:", brand);
   }
 
   render() {
     return (
-      <Container>
-        <Box>
-          <ul>
-            {this.state.brandListReady &&
-              this.state.brandList.map((brand) => <BrandListItem brand={brand} clickHandler={this.onClickBrand}></BrandListItem>
-              )}
-          </ul>
-        </Box>
+      <Container style={{ display: "flex" }}>
+        <BrandList
+          brands={this.state.brandList}
+          activeBrand={this.state.active}
+          isLoading={!this.state.brandListReady}
+          clickHandler={this.onClickBrand.bind(this)}
+        ></BrandList>
+        {this.state.active && (
+          <BrandEditor brand={this.state.active}></BrandEditor>
+        )}
       </Container>
     );
   }

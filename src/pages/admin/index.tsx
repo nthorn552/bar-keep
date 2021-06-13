@@ -11,6 +11,7 @@ const useStyles = makeStyles((theme: Theme) =>
     header: {},
     managerContainer: {
       display: "flex",
+      flexDirection: "column"
     },
   })
 );
@@ -22,7 +23,9 @@ const Admin: React.StatelessComponent<{}> = () => {
       <h2 className={classes.header}>Manage the Bar's Content</h2>
       <Container className={classes.managerContainer}>
         <BrandManager></BrandManager>
+        <br />
         <ProductManager></ProductManager>
+        <br />
         <RecipeManager></RecipeManager>
       </Container>
     </Container>

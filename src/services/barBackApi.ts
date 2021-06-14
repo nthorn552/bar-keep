@@ -5,5 +5,5 @@ const BAR_BACK_HOST = 'http://localhost:8000';
 export default axios.create({
   baseURL: BAR_BACK_HOST,
   responseType: "json",
-  headers: {'Access-Control-Allow-Origin': '*'}
+  headers: {'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json'}
 });

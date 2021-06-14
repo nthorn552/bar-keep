@@ -1,14 +1,15 @@
 import React from "react";
 import Container from "@material-ui/core/Container";
-import Box from "@material-ui/core/Box";
 import backBackApi from "../../services/barBackApi";
-
-import Product from "../../types/Product";
 import { AxiosResponse } from "axios";
+import Product from "../../types/Product";
+import ProductList from "./productList";
+import ProductEditor from "./ProductEditor";
 
 type ProductManagerState = {
   productList: Product[];
   productListReady: boolean;
+  active?: Product;
 };
 
 class ProductManager extends React.Component<{}, ProductManagerState> {
@@ -30,16 +31,23 @@ class ProductManager extends React.Component<{}, ProductManagerState> {
     });
   }
 
+  onClickProduct(product: Product) {
+    this.setState({ active: product });
+    console.log("product selected:", product);
+  }
+
   render() {
     return (
-      <Container>
-        <Box>
-          <ul>
-            {this.state.productListReady &&
-              this.state.productList.map((product) => <li>{product.name}</li>
-              )}
-          </ul>
-        </Box>
+      <Container style={{ display: "flex" }}>
+        <ProductList
+          products={this.state.productList}
+          activeProduct={this.state.active}
+          isLoading={!this.state.productListReady}
+          clickHandler={this.onClickProduct.bind(this)}
+        ></ProductList>
+        {this.state.active && (
+          <ProductEditor product={this.state.active}></ProductEditor>
+        )}
       </Container>
     );
   }

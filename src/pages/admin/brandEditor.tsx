@@ -1,15 +1,40 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 import Container from "@material-ui/core/Container";
-import backBackApi from "../../services/barBackApi";
-import { AxiosResponse } from "axios";
 import Brand from "../../types/Brand";
+import {
+  Button,
+  createStyles,
+  TextField,
+  Theme,
+  withStyles,
+  WithStyles,
+} from "@material-ui/core";
 
-type BrandEditorProps = {
-    brand: Brand;
-};
+const styles = (theme: Theme) =>
+  createStyles({
+    root: {
+      display: "flex",
+      flexDirection: "column",
+    },
+    buttonRow: {
+      display: "flex",
+      "& > *": {
+        marginTop: theme.spacing(1),
+        marginBottom: theme.spacing(1),
+      },
+      "& :not(:first-child)": {
+        marginLeft: theme.spacing(1),
+      },
+    },
+  });
+interface BrandEditorProps extends WithStyles<typeof styles> {
+  brand: Brand;
+  updateBrand: (newBrand: Brand) => Promise<never>;
+  closeCallback: () => Promise<never>;
+}
 type BrandEditorState = {
-    isDirty: boolean,
-    draft: Brand
+  isDirty: boolean;
+  draft: Brand;
 };
 
 class BrandEditor extends React.Component<BrandEditorProps, BrandEditorState> {
@@ -17,20 +42,62 @@ class BrandEditor extends React.Component<BrandEditorProps, BrandEditorState> {
     super(props);
     this.state = {
       isDirty: false,
-      draft: props.brand
+      draft: props.brand,
     };
   }
 
-  onSave() {
-      console.log("Update Brand:")
+  componentWillReceiveProps(newProps: BrandEditorProps) {
+    if (newProps.brand && newProps.brand.id !== this.state.draft?.id) {
+      this.setState({ draft: newProps.brand, isDirty: false });
+    }
+  }
+
+  onNameChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    this.setState({
+      draft: { ...this.state.draft, name: event.target.value },
+      isDirty: true,
+    });
+  }
+
+  async onSave() {
+    await this.props.updateBrand(this.state.draft);
+    this.setState({ draft: this.props.brand, isDirty: false });
+  }
+
+  async onClose() {
+    this.props.closeCallback();
   }
 
   render() {
+    const { classes } = this.props;
     return (
       <Container>
-          {JSON.stringify(this.state.draft)}
+        <TextField
+          variant="outlined"
+          onChange={this.onNameChange.bind(this)}
+          value={this.state.draft.name}
+        ></TextField>
+        <div className={classes.buttonRow}>
+          <Button
+            variant="contained"
+            onClick={this.onClose.bind(this)}
+            aria-label="Close editor"
+          >
+            {this.state.isDirty ? "Cancel" : "Close"}
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            disabled={!this.state.isDirty}
+            onClick={this.onSave.bind(this)}
+            aria-label="Save Changes"
+          >
+            Save Changes
+          </Button>
+        </div>
       </Container>
     );
   }
 }
-export default BrandEditor;
+
+export default withStyles(styles)(BrandEditor);

@@ -1,7 +1,7 @@
 import React from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Brand from "../../types/Brand";
-import { Container } from "@material-ui/core";
+import { Container, List } from "@material-ui/core";
 import BrandListItem from "./brandListItem";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -24,7 +24,7 @@ type BrandListProps = {
 export default (props: BrandListProps) => {
   const classes = useStyles();
   return (
-    <Container>
+    <List component="div" aria-label="main mailbox folders">
       {!props.isLoading &&
         props.brands.map((brand) => (
           <BrandListItem
@@ -34,6 +34,6 @@ export default (props: BrandListProps) => {
             clickHandler={props.clickHandler}
           ></BrandListItem>
         ))}
-    </Container>
+        </List>
   );
 };

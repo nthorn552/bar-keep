@@ -9,14 +9,15 @@ async function get(id?: Product): Promise<Product[]> {
     }
   );
 }
-
-function update(product: Product): Promise<Product> {
+async function update(product: Product): Promise<Product> {
   console.log("requesting update", product);
-  return BarBackApi.put(`/products/${product.id}`, product);
+  const requestResult = await BarBackApi.put(`/products/${product.id}`, product);
+  return requestResult.data;
 }
-function create(product: Product): Promise<Product> { // TODO
+async function create(product: Product): Promise<Product> { // TODO
   console.log("requesting create", product);
-  return BarBackApi.post(`/products`, product);
+  const requestResult = await BarBackApi.post(`/products`, product);
+  return requestResult.data;
 }
 
 export default {

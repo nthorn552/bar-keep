@@ -8,7 +8,6 @@ import Inventory, { InventoryPriority } from "./types/Inventory";
 import InventoryDisplay from "./components/InventoryDisplay";
 import BarMenu from "./components/BarMenu";
 import AddNewInventory from "./components/AddNewInventory";
-import { AxiosResponse } from "axios";
 
 type BarKeepState = {
   productList: Product[];

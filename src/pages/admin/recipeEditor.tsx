@@ -1,6 +1,8 @@
 import React, { ChangeEvent } from "react";
 import Container from "@material-ui/core/Container";
 import Recipe from "../../types/Recipe";
+import Product from "../../types/Product";
+import productService from "../../services/productService";
 import {
   Button,
   createStyles,
@@ -9,6 +11,11 @@ import {
   withStyles,
   WithStyles,
 } from "@material-ui/core";
+import AddNewInventory from "../../components/AddNewInventory";
+import AddProduct from "../../components/AddProduct";
+import Ingredient, { IngredientQuantityType } from "../../types/Ingredient";
+import ingredientService from "../../services/ingredientService";
+import IngredientEditor from "./ingredientEditor";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -33,6 +40,9 @@ interface RecipeEditorProps extends WithStyles<typeof styles> {
   closeCallback: () => Promise<never>;
 }
 type RecipeEditorState = {
+  productList: Product[];
+  productListReady: boolean;
+  filteredProductList: Product[];
   isDirty: boolean;
   draft: Recipe;
 };
@@ -44,9 +54,19 @@ class RecipeEditor extends React.Component<
   constructor(props: RecipeEditorProps) {
     super(props);
     this.state = {
+      productList: [],
+      productListReady: false,
+      filteredProductList: [],
       isDirty: false,
       draft: props.recipe,
     };
+  }
+
+  componentDidMount() {
+    productService.get().then((productList) => {
+      this.setState({ ...this.state, productListReady: true, productList });
+      this.setFilteredProductList();
+    });
   }
 
   componentWillReceiveProps(newProps: RecipeEditorProps) {
@@ -57,6 +77,7 @@ class RecipeEditor extends React.Component<
 
   onNameChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     this.setState({
+      ...this.state,
       draft: { ...this.state.draft, name: event.target.value },
       isDirty: true,
     });
@@ -64,11 +85,58 @@ class RecipeEditor extends React.Component<
 
   async onSave() {
     await this.props.updateRecipe(this.state.draft);
-    this.setState({ draft: this.props.recipe, isDirty: false });
+    this.setState({ 
+      ...this.state, 
+      draft: this.props.recipe, 
+      isDirty: false });
   }
 
   async onClose() {
     this.props.closeCallback();
+  }
+
+  setFilteredProductList() {
+    const productsIdsInIngredients: string[] = this.state.draft.ingredients.reduce(
+      (list, ingredient) => [...list, ingredient.product.id],
+      []
+    );
+    const newFilteredProductList = this.state.productList.filter(
+      (product) => !productsIdsInIngredients.includes(product.id)
+    );
+    this.setState({
+      ...this.state,
+      filteredProductList: newFilteredProductList,
+    });
+  }
+
+  async addNewIngredient(product: Product) {
+    const ingredientPayload: Omit<Ingredient, "id"> = {
+      product,
+      quantityCount: 0,
+      quantityType: IngredientQuantityType.PART
+    }
+    const newIngredient = await ingredientService.create(this.state.draft.id, ingredientPayload);
+    newIngredient.product = product; // Patch this is in on the fly to save the extra request;
+    this.setState(
+      {
+        ...this.state,
+        draft: {
+          ...this.state.draft,
+          ingredients: [...this.state.draft.ingredients, newIngredient],
+        }
+      },
+      () => {
+        this.setFilteredProductList();
+      }
+      );
+  }
+
+  async handleIngredientUpdate(ingredientId: string, ingredient?: Ingredient | undefined): Promise<void> {
+    if (!ingredient) {
+      await ingredientService.destroy(this.props.recipe.id, ingredientId);
+    } else {
+      await ingredientService.update(this.props.recipe.id, ingredient);
+    }
   }
 
   render() {
@@ -80,6 +148,19 @@ class RecipeEditor extends React.Component<
           onChange={this.onNameChange.bind(this)}
           value={this.state.draft.name}
         ></TextField>
+        <br />
+
+
+        {this.state.productListReady && (
+            <AddProduct
+              availableProducts={this.state.filteredProductList}
+              handleAdd={this.addNewIngredient.bind(this)}
+            />
+          )}
+
+        {this.state.draft.ingredients.map(ingredient =>   
+          <IngredientEditor ingredient={ingredient} recipeId={this.props.recipe?.id} updateIngredient={this.handleIngredientUpdate}/>
+        )}
         <div className={classes.buttonRow}>
           <Button
             variant="contained"

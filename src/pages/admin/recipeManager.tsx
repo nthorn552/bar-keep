@@ -60,8 +60,9 @@ class RecipeManager extends React.Component<RecipeManagerProps, RecipeManagerSta
     });
   }
 
-  onClickRecipe(recipe: Recipe) {
-    this.setState({ active: recipe });
+  async onClickRecipe(recipe: Recipe) {
+    const fullRecipe = await RecipeService.get(recipe.id);
+    this.setState({ active: fullRecipe });
   }
 
   onSaveUpdate() {
@@ -102,7 +103,7 @@ class RecipeManager extends React.Component<RecipeManagerProps, RecipeManagerSta
   render() {
     const { classes } = this.props;
     return (
-      <Container>
+      <Container className={classes.root}>
         <Box className={classes.column}>
           <div className={classes.headerBar}>
             <IconButton color="primary" aria-label="Add Recipe">

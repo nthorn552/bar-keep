@@ -80,6 +80,10 @@ class ProductEditor extends React.Component<
           onChange={this.onNameChange.bind(this)}
           value={this.state.draft.name}
         ></TextField>
+        <TextField
+          variant="outlined"
+          value={this.state.draft?.brand?.id || ""}
+        ></TextField>
         <div className={classes.buttonRow}>
           <Button
             variant="contained"

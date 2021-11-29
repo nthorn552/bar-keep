@@ -59,6 +59,13 @@ class BrandEditor extends React.Component<BrandEditorProps, BrandEditorState> {
     });
   }
 
+  onUrlChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    this.setState({
+      draft: { ...this.state.draft, logoUrl: event.target.value },
+      isDirty: true,
+    });
+  }
+
   async onSave() {
     await this.props.updateBrand(this.state.draft);
     this.setState({ draft: this.props.brand, isDirty: false });
@@ -76,6 +83,11 @@ class BrandEditor extends React.Component<BrandEditorProps, BrandEditorState> {
           variant="outlined"
           onChange={this.onNameChange.bind(this)}
           value={this.state.draft.name}
+        ></TextField>
+        <TextField
+          variant="outlined"
+          onChange={this.onUrlChange.bind(this)}
+          value={this.state.draft.logoUrl}
         ></TextField>
         <div className={classes.buttonRow}>
           <Button

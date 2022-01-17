@@ -1,9 +1,10 @@
 import axios from 'axios';
 
-const BAR_BACK_HOST = 'http://localhost:8000';
+const API_HANDLER_BASE_URL = 'http://localhost:8000';
+// const API_HANDLER_BASE_URL = 'http://localhost:8080/api';
 
 export default axios.create({
-  baseURL: BAR_BACK_HOST,
+  baseURL: API_HANDLER_BASE_URL,
   responseType: "json",
-  headers: {'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json'}
+  headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
 });

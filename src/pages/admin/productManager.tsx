@@ -6,7 +6,7 @@ import { AxiosResponse } from "axios";
 import Product from "../../types/Product";
 import ProductService from "../../services/productService";
 import ProductList from "./productList";
-import ProductEditor from "./ProductEditor";
+import ProductEditor from "./productEditor";
 import {
   Box,
   createStyles,
@@ -86,7 +86,7 @@ class ProductManager extends React.Component<
   }
 
   private refreshProducts() {
-    backBackApi.get(`/products`).then((res: AxiosResponse<Product[]>) => {
+    backBackApi.get(`/products?includeBrands=true`).then((res: AxiosResponse<Product[]>) => {
       this.setState({
         ...this.state,
         productListReady: true,

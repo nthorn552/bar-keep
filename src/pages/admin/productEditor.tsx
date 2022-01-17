@@ -82,7 +82,7 @@ class ProductEditor extends React.Component<
         ></TextField>
         <TextField
           variant="outlined"
-          value={this.state.draft?.brand?.id || ""}
+          value={this.state.draft?.brand?.name || ""}
         ></TextField>
         <div className={classes.buttonRow}>
           <Button

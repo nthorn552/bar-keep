@@ -6,7 +6,7 @@ import { AxiosResponse } from "axios";
 import Brand from "../../types/Brand";
 import BrandService from "../../services/brandService";
 import BrandList from "./brandList";
-import BrandEditor from "./BrandEditor";
+import BrandEditor from "./brandEditor";
 import {
   Box,
   createStyles,

@@ -9,7 +9,14 @@ module.exports = {
         publicPath: '/'
     },
     devServer: {
-      historyApiFallback: true,
+        historyApiFallback: true,
+        proxy: {
+            '/api': {
+              target: 'http://localhost:8000',
+              changeOrigin: true,
+              pathRewrite: { '^/api': '/' },
+            },
+        }
     },
     plugins: [
         new HtmlWebpackPlugin({

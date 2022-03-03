@@ -66,7 +66,8 @@ class ProductManager extends React.Component<
   }
 
   async updateActiveProduct(product: Product) {
-    const updatedResult = await ProductService.update(product);
+    console.log("updateActiveProduct", product);
+    const updatedResult = await ProductService.update(product, {includeBrands: true});
     const updatedList = [...this.state.productList];
     const resultIndex = updatedList.findIndex(
       (thisProduct) => thisProduct.id === updatedResult.id

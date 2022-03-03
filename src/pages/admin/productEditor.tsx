@@ -1,5 +1,6 @@
 import React, { ChangeEvent } from "react";
 import Container from "@material-ui/core/Container";
+import backBackApi from "../../services/barBackApi";
 import Product from "../../types/Product";
 import {
   Button,
@@ -9,6 +10,9 @@ import {
   withStyles,
   WithStyles,
 } from "@material-ui/core";
+import { Autocomplete } from "@material-ui/lab";
+import Brand from "../../types/Brand";
+import { AxiosResponse } from "axios";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -35,6 +39,9 @@ interface ProductEditorProps extends WithStyles<typeof styles> {
 type ProductEditorState = {
   isDirty: boolean;
   draft: Product;
+  brandFieldValue: string;
+  brandList: Brand[];
+  brandListReady: boolean;
 };
 
 class ProductEditor extends React.Component<
@@ -45,14 +52,38 @@ class ProductEditor extends React.Component<
     super(props);
     this.state = {
       isDirty: false,
-      draft: props.product,
+      draft: {
+        ...props.product,
+        brand: props.product.brand?.id ? props.product.brand : undefined,
+      },
+      brandFieldValue: "",
+      brandList: [],
+      brandListReady: false,
     };
   }
 
   componentWillReceiveProps(newProps: ProductEditorProps) {
+    console.log("new props");
     if (newProps.product && newProps.product.id !== this.state.draft?.id) {
-      this.setState({ draft: newProps.product, isDirty: false });
+      console.log("incoming product", newProps.product);
+      this.setState({
+        ...this.state,
+        brandFieldValue: newProps.product.brand?.name || "",
+        draft: newProps.product,
+        isDirty: false,
+      });
     }
+  }
+
+  componentDidMount(): void {
+    backBackApi.get(`/brands`).then((res: AxiosResponse<Brand[]>) => {
+      this.setState({
+        ...this.state,
+        brandList: res.data,
+        brandListReady: true,
+        brandFieldValue: this.props.product.brand?.name || "",
+      });
+    });
   }
 
   onNameChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
@@ -64,7 +95,11 @@ class ProductEditor extends React.Component<
 
   async onSave() {
     await this.props.updateProduct(this.state.draft);
-    this.setState({ draft: this.props.product, isDirty: false });
+    this.setState({
+      draft: this.props.product,
+      brandFieldValue: this.state.draft.brand?.name || "",
+      isDirty: false,
+    });
   }
 
   async onClose() {
@@ -80,10 +115,40 @@ class ProductEditor extends React.Component<
           onChange={this.onNameChange.bind(this)}
           value={this.state.draft.name}
         ></TextField>
-        <TextField
-          variant="outlined"
-          value={this.state.draft?.brand?.name || ""}
-        ></TextField>
+        <Autocomplete
+          options={this.state.brandList}
+          getOptionLabel={(option: Brand) => option.name}
+          openOnFocus={false}
+          inputValue={this.state.brandFieldValue}
+          style={{ width: 300 }}
+          renderInput={(params: any) => (
+            <TextField
+              {...params}
+              label="Select Brand (if applicable)"
+              variant="outlined"
+            />
+          )}
+          onInputChange={(_event, value) =>
+            this.setState({
+              ...this.state,
+              brandFieldValue: value,
+            })
+          }
+          onChange={(_event, brand: Brand) => {
+            console.log("onchange new state", {
+              ...this.state,
+              isDirty: true,
+              brandFieldValue: brand?.name,
+              draft: { ...this.state.draft, brand, brandId: brand?.id },
+            });
+            this.setState({
+              ...this.state,
+              isDirty: true,
+              brandFieldValue: brand?.name || "",
+              draft: { ...this.state.draft, brand, brandId: brand?.id || null },
+            });
+          }}
+        />
         <div className={classes.buttonRow}>
           <Button
             variant="contained"

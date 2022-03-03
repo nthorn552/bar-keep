@@ -9,12 +9,17 @@ async function get(id?: Product): Promise<Product[]> {
     }
   );
 }
-async function update(product: Product): Promise<Product> {
+async function update(
+  product: Product,
+  options?: { includeBrands?: boolean }
+): Promise<Product> {
   console.log("requesting update", product);
-  const requestResult = await BarBackApi.put(`/products/${product.id}`, product);
+  const targetUrl = `/products/${product.id}`;
+  const requestResult = await BarBackApi.put(targetUrl, product, { params: options });
   return requestResult.data;
 }
-async function create(product: Product): Promise<Product> { // TODO
+async function create(product: Product): Promise<Product> {
+  // TODO
   console.log("requesting create", product);
   const requestResult = await BarBackApi.post(`/products`, product);
   return requestResult.data;
@@ -23,5 +28,5 @@ async function create(product: Product): Promise<Product> { // TODO
 export default {
   get,
   update,
-  create
+  create,
 };

@@ -57,14 +57,13 @@ export default (props: NewItemProps) => {
                             </MenuItem>
       </TextField>
       <Autocomplete
-        id="combo-box-demo"
         options={props.availableProducts}
         getOptionLabel={(option: Product) => option.name}
         openOnFocus={false}
         inputValue={value}
         style={{ width: 300 }}
         renderInput={(params: any) => <TextField {...params} label='Add product...' variant="outlined" />}
-        onInputChange={(_event, value, reason) => reason == "reset" ? setValue("") : setValue(value)}
+        onInputChange={(_event, value, reason) => reason === "reset" ? setValue("") : setValue(value)}
         onChange={(_event, item: Product) => {
           if (item) {
             props.addInventory({ product: item, priority });

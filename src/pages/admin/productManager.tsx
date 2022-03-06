@@ -66,8 +66,9 @@ class ProductManager extends React.Component<
   }
 
   async updateActiveProduct(product: Product) {
-    console.log("updateActiveProduct", product);
-    const updatedResult = await ProductService.update(product, {includeBrands: true});
+    const updatedResult = await ProductService.update(product, {
+      includeBrands: true,
+    });
     const updatedList = [...this.state.productList];
     const resultIndex = updatedList.findIndex(
       (thisProduct) => thisProduct.id === updatedResult.id
@@ -87,13 +88,15 @@ class ProductManager extends React.Component<
   }
 
   private refreshProducts() {
-    backBackApi.get(`/products?includeBrands=true`).then((res: AxiosResponse<Product[]>) => {
-      this.setState({
-        ...this.state,
-        productListReady: true,
-        productList: res.data,
+    backBackApi
+      .get(`/products?includeBrands=true`)
+      .then((res: AxiosResponse<Product[]>) => {
+        this.setState({
+          ...this.state,
+          productListReady: true,
+          productList: res.data,
+        });
       });
-    });
   }
 
   render() {

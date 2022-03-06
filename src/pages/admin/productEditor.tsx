@@ -63,9 +63,7 @@ class ProductEditor extends React.Component<
   }
 
   componentWillReceiveProps(newProps: ProductEditorProps) {
-    console.log("new props");
     if (newProps.product && newProps.product.id !== this.state.draft?.id) {
-      console.log("incoming product", newProps.product);
       this.setState({
         ...this.state,
         brandFieldValue: newProps.product.brand?.name || "",
@@ -135,12 +133,6 @@ class ProductEditor extends React.Component<
             })
           }
           onChange={(_event, brand: Brand) => {
-            console.log("onchange new state", {
-              ...this.state,
-              isDirty: true,
-              brandFieldValue: brand?.name,
-              draft: { ...this.state.draft, brand, brandId: brand?.id },
-            });
             this.setState({
               ...this.state,
               isDirty: true,

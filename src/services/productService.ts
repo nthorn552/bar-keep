@@ -19,7 +19,6 @@ async function update(
   return requestResult.data;
 }
 async function create(product: Product): Promise<Product> {
-  // TODO
   console.log("requesting create", product);
   const requestResult = await BarBackApi.post(`/products`, product);
   return requestResult.data;

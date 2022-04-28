@@ -8,6 +8,7 @@ import Inventory, { InventoryPriority } from "./types/Inventory";
 import InventoryDisplay from "./components/InventoryDisplay";
 import BarMenu from "./components/BarMenu";
 import AddNewInventory from "./components/AddNewInventory";
+import AddPresetIngredients from "./components/AddPresetIngredients";
 
 type BarKeepState = {
   productList: Product[];
@@ -34,11 +35,11 @@ class BarKeep extends React.Component<{}, BarKeepState> {
     });
   }
 
-  addNewInventory(newInventory: Inventory) {
+  addNewInventory(newInventory: Inventory | Inventory[]) {
     this.setState(
       {
         ...this.state,
-        inventoryList: [...this.state.inventoryList, newInventory],
+        inventoryList: [...this.state.inventoryList, ...(Array.isArray(newInventory) ? newInventory : [newInventory])],
       },
       () => {
         this.setFilteredProductList();
@@ -85,10 +86,14 @@ class BarKeep extends React.Component<{}, BarKeepState> {
         <Box>
           {this.state.productListReady && (
             <AddNewInventory
-              availableProducts={this.state.filteredProductList}
-              addInventory={this.addNewInventory.bind(this)}
+            availableProducts={this.state.filteredProductList}
+            addInventory={this.addNewInventory.bind(this)}
             />
-          )}
+            )}
+          <AddPresetIngredients
+            availableProducts={this.state.filteredProductList}
+            addInventory={this.addNewInventory.bind(this)}
+          />
         </Box>
         <hr />
         <Box>

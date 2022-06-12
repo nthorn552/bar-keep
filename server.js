@@ -1,18 +1,19 @@
-var path = require('path');
-var express = require('express');
 require('dotenv').config()  
-const { createProxyMiddleware } = require('http-proxy-middleware');
+const path = require('path'),
+      express = require('express'),
+      { createProxyMiddleware } = require('http-proxy-middleware');
 
-const app = express();
 var options = {
   target: process.env.BAR_BACK_URL || "http://localhost:8000",
   changeOrigin: true,
+  xfwd: true,
   pathRewrite: {
     '^/api': '/'
   },
 }
 const apiProxy = createProxyMiddleware(options)
 
+const app = express();
 app.use("/api", apiProxy);
 app.use(express.static(path.join(__dirname, 'dist')));
 

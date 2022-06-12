@@ -1,6 +1,6 @@
+require("dotenv").config();
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
-
 module.exports = {
     entry: './index.tsx',
     output: {
@@ -12,7 +12,7 @@ module.exports = {
         historyApiFallback: true,
         proxy: {
             '/api': {
-              target: 'http://localhost:8000',
+              target: process.env.BAR_BACK_URL,
               changeOrigin: true,
               pathRewrite: { '^/api': '/' },
             },

@@ -1,9 +1,10 @@
-import axios from 'axios';
-
-const API_HANDLER_BASE_URL = 'http://localhost:8080/api';
+import axios from "axios";
 
 export default axios.create({
-  baseURL: API_HANDLER_BASE_URL,
+  baseURL: `/api`,
   responseType: "json",
-  headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }
+  headers: {
+    "Access-Control-Allow-Origin": "*",
+    "Content-Type": "application/json",
+  },
 });
